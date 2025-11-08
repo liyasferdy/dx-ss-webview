@@ -19,17 +19,17 @@ import {
 } from "./components/ui/tooltip";
 
 function App() {
-  const [open, setOpen] = useState(true); // default terbuka
+  const [open, setOpen] = useState(true);
 
   return (
     <TooltipProvider>
       <SidebarProvider open={open} onOpenChange={setOpen}>
-        <div className="flex flex-row min-h-screen">
+        <div className="flex flex-row min-h-screen min-w-screen">
           {/* Sidebar */}
           <AppSidebar />
 
           {/* Main Content */}
-          <div className="flex flex-col flex-1 p-3 bg-stone-50 min-w-screen">
+          <div className="flex flex-col flex-1 p-3">
             {/* Trigger Sidebar */}
             <div className="flex justify-start mb-4">
               <Tooltip>

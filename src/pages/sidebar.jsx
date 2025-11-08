@@ -1,14 +1,14 @@
+import { useState, useEffect } from "react";
 import {
   Sidebar,
-  SidebarProvider,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  useSidebar,
 } from "../components/ui/sidebar";
 import {
   Collapsible,
@@ -17,30 +17,83 @@ import {
 } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 
+import dataIcon from "@/assets/text-search.svg";
+import chartPie from "@/assets/chart-pie.svg";
+import chartLine from "@/assets/chart-line.svg";
+import rightIcon from "@/assets/chevron-right.svg";
+import downIcon from "@/assets/chevron-down.svg";
+
 export default function AppSidebar() {
+  const { state } = useSidebar();
+  const [statusOpen, setStatusOpen] = useState(true);
+
+  useEffect(() => {
+    if (state === "collapsed") {
+      setStatusOpen(false);
+    }
+    if (state === "expanded") setStatusOpen(true);
+  }, [state]);
+
   return (
-    <Sidebar className="w-64 bg-stone-100 border-r border-slate-200">
-      <SidebarHeader className="font-mono m-2">DESI-Sample</SidebarHeader>
+    <Sidebar
+      className="bg-stone-100 border-r border-slate-200"
+      collapsible="icon">
+      <SidebarHeader className="m-2 font-semibold">DESI-Sample</SidebarHeader>
+
       <Separator centered className="w-[230px]" />
 
-      <SidebarContent className="p-1 pt-5 font-stretch-90%">
+      <SidebarContent className="p-1 pt-5">
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Dashboard */}
               <SidebarMenuItem>
-                <SidebarMenuButton>Dashboard</SidebarMenuButton>
+                <SidebarMenuButton asChild>
+                  <a href="#">
+                    <img
+                      src={chartPie}
+                      alt="Dashboard"
+                      className="size-4 shrink-0"
+                    />
+                    <span>Dashboard</span>
+                  </a>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
 
           {/* Collapsible Status Section */}
-          <Collapsible defaultOpen className="group/collapsible">
-            {/* Collapsible Trigger */}
+          <Collapsible
+            open={statusOpen}
+            onOpenChange={setStatusOpen}
+            className="mt-2">
             <CollapsibleTrigger asChild>
-              <SidebarGroupLabel className="cursor-pointer hover:opacity-80">
-                Status
-              </SidebarGroupLabel>
+              <SidebarMenuButton asChild>
+                <a
+                  href="#"
+                  className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={chartLine}
+                      alt="Status"
+                      className="size-4 shrink-0"
+                    />
+                    <span>Status</span>
+                  </div>
+                  {/* Right icon - shown when closed */}
+                  <img
+                    src={rightIcon}
+                    alt="Collapse"
+                    className="size-4 transition-transform group-data-[state=closed]/collapsible:block hidden"
+                  />
+                  {/* Down icon - shown when open */}
+                  <img
+                    src={downIcon}
+                    alt="Expand"
+                    className="size-4 transition-transform group-data-[state=open]/collapsible:block hidden"
+                  />
+                </a>
+              </SidebarMenuButton>
             </CollapsibleTrigger>
 
             <CollapsibleContent>
@@ -60,10 +113,20 @@ export default function AppSidebar() {
             </CollapsibleContent>
           </Collapsible>
 
-          <SidebarGroupContent>
+          {/* === Data overview paling bawah === */}
+          <SidebarGroupContent className="mt-3">
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton>Data overview</SidebarMenuButton>
+                <SidebarMenuButton asChild>
+                  <a href="#">
+                    <img
+                      src={dataIcon}
+                      alt="Data Overview"
+                      className="size-4 shrink-0"
+                    />
+                    <span>Data overview</span>
+                  </a>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
