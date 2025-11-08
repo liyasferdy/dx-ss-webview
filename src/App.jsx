@@ -1,72 +1,33 @@
-import { useState } from "react";
-import { Button } from "./components/ui/button";
-import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
-import AppSidebar from "./pages/sidebar";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./components/ui/tooltip";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "./components/ui/tooltip";
+import Layout from "./Layout";
+import Dashboard from "./pages/dashboard";
+import DataOverview from "./pages/data_overview";
+import AllStatus from "./pages/status/all";
+import DelayStatus from "./pages/status/delay";
+import FinishStatus from "./pages/status/finish";
+import OngoingStatus from "./pages/status/ongoing";
 
 function App() {
-  const [open, setOpen] = useState(true);
-
   return (
-    <TooltipProvider>
-      <SidebarProvider open={open} onOpenChange={setOpen}>
-        <div className="flex flex-row min-h-screen min-w-screen">
-          {/* Sidebar */}
-          <AppSidebar />
-
-          {/* Main Content */}
-          <div className="flex flex-col flex-1 p-3">
-            {/* Trigger Sidebar */}
-            <div className="flex justify-start mb-4">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <SidebarTrigger>
-                    <Button variant="ghost">
-                      {open ? "Close Sidebar" : "Open Sidebar"}
-                    </Button>
-                  </SidebarTrigger>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>{open ? "Hide sidebar" : "Show sidebar"}</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-
-            {/* Konten utama */}
-            <div className="p-5">
-              <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-              <Card className="w-full max-w-sm">
-                <CardHeader>
-                  <CardTitle>Card Title</CardTitle>
-                  <CardDescription>Card Description</CardDescription>
-                  <CardAction>Card Action</CardAction>
-                </CardHeader>
-                <CardContent>
-                  <p>Card Content</p>
-                </CardContent>
-                <CardFooter>
-                  <p>Card Footer</p>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </SidebarProvider>
-    </TooltipProvider>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="data-overview" element={<DataOverview />} />
+              <Route path="status/all" element={<AllStatus />} />
+              <Route path="status/ongoing" element={<OngoingStatus />} />
+              <Route path="status/delay" element={<DelayStatus />} />
+              <Route path="status/finish" element={<FinishStatus />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   );
 }
 
